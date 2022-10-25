@@ -4,6 +4,7 @@ const mongoose=require('mongoose');
 const path=require('path');
 const bodyParser = require('body-parser');
 const passport = require('passport');
+const Event=require('./models/eventSchema');
 // const config=require('./config/database');
 const static_path=path.join(__dirname,'public');
 console.log(static_path);
@@ -32,17 +33,50 @@ app.post('/adminlogin',(req,res)=>{
         res.redirect('/adminlogin');
     }
 })
-app.get('/aevents',(req,res)=>{
-    res.render('aevents');
+app.get('/aevents',async (req,res)=>{
+    const events=await Event.find();
+    console.log(events);
+    res.render('aevents',{events});
 })
-app.get('/events',(req,res)=>{
-    res.render('events');
-})
-app.get('/addevents',(req,res)=>{
-    res.render('addevents');
+app.get('/events',async (req,res)=>{
+    const events=await Event.find();
+    console.log(events);
+    res.render('events',{events});
 })
 app.get('/addevent',(req,res)=>{
     res.render('addevent');
+})
+app.post('/addevent',async (req,res)=>{
+    const {
+        title,
+        description,
+        date,
+        time,
+        url,
+        venue,
+        host
+    }=req.body;
+    const admin_id='123';
+    try{
+        const newEvent=new Event({
+            title,
+            description,
+            date,
+            time,
+            url,
+            venue,
+            host,
+            admin_id
+        });
+        await newEvent.save()
+        res.send('Event added');
+    }
+    catch(err){
+        console.log(err);
+        res.send("error");
+    }
+// }console.log(title,description,date,time,url,venue,host);
+    
 })
 mongoose.connect('mongodb://localhost:27017/nitc_events',{useNewUrlParser:true,useUnifiedTopology:true});
 app.listen(3000,()=>{

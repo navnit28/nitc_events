@@ -18,7 +18,7 @@
 
             <div class="menu0">
                 <ul>
-                    <li><a href="#">HOME</a></li>
+                    <li><a href="aevents">HOME</a></li>
                     <li><a href="addevent">CREATE EVENT</a></li>
                     <li><a href="#">LOG OUT</a></li>
                 </ul>
@@ -28,22 +28,20 @@
 
         <div class="content">
             <div class="container">
-
+                <% for(var i=0;i<events.length;i++){ %>
                 <div class="card-media">
-                    <!-- media container -->
                     <div class="card-media-object-container">
                         <div class="card-media-object" style="background-image: url(https://s9.postimg.cc/y0sfm95gv/prince_f.jpg);"></div>
                     </div>
-                    <!-- body container -->
                     <div class="card-media-body">
                         <div class="card-media-body-top">
-                            <span class="subtle">Mon, APR 09, 7:00 PM</span>
+                            <span class="subtle"><%= events[i].date %> <%= events[i].time %></span>
                         </div>
-                        <H2>SAC Onam</H2>
-                        <div>Host - SAC</div>
-                        <span class="card-media-body-heading">This Thing Called Life: A Celebration of Prince and His Legacy at MEZZANINE SF</span>
+                        <H2><%= events[i].title %></H2>
+                        <div>Host - <%= events[i].host %></div>
+                        <span class="card-media-body-heading"><%= events[i].description %></span>
                         <div class="card-media-body-supporting-bottom">
-                            <span class="card-media-body-supporting-bottom-text subtle">Venue - Auditorium NITC</span>
+                            <span class="card-media-body-supporting-bottom-text subtle">Venue - <%= events[i].venue %></span>
                             <a href="#/" class="card-media-body-supporting-bottom-text subtle u-float-right card-media-link">Delete</a>
                             <a href="#/" class="card-media-body-supporting-bottom-text subtle u-float-right card-media-link">Edit</a>
                         </div>
@@ -54,31 +52,7 @@
                         </div>
                     </div>
                 </div>
-                <div class="card-media">
-                    <!-- media container -->
-                    <div class="card-media-object-container">
-                        <div class="card-media-object" style="background-image: url(https://s9.postimg.cc/y0sfm95gv/prince_f.jpg);"></div>
-                    </div>
-                    <!-- body container -->
-                    <div class="card-media-body">
-                        <div class="card-media-body-top">
-                            <span class="subtle">Mon, APR 09, 7:00 PM</span>
-                        </div>
-                        <H2>ICPC Coding Competition</H2>
-                        <div>Host - CP HUB CLUB</div>
-                        <span class="card-media-body-heading">This Thing Called Life: A Celebration of Prince and His Legacy at MEZZANINE SF</span>
-                        <div class="card-media-body-supporting-bottom">
-                            <span class="card-media-body-supporting-bottom-text subtle">Venue - Online Event</span>
-                            <a href="#/" class="card-media-body-supporting-bottom-text subtle u-float-right card-media-link">Delete</a>
-                            <a href="#/" class="card-media-body-supporting-bottom-text subtle u-float-right card-media-link">Edit</a>
-                        </div>
-                        <div class="card-media-body-supporting-bottom card-media-body-supporting-bottom-reveal">
-                            <span class="card-media-body-supporting-bottom-text subtle">#Music #Party</span>
-                            <a href="#/" class="card-media-body-supporting-bottom-text card-media-link u-float-right">Delete</a>
-                            <a href="#/" class="card-media-body-supporting-bottom-text card-media-link u-float-right">Edit</a>
-                        </div>
-                    </div>
-                </div>
+                <% } %>
             </div>
         </div>
     </div>

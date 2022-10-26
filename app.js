@@ -78,6 +78,54 @@ app.post('/addevent',async (req,res)=>{
 // }console.log(title,description,date,time,url,venue,host);
     
 })
+app.get('/editevent',async (req,res)=>{
+    const event=await Event.findById(req.query.id);
+    console.log(event);
+    res.render('editevent',{event});
+})
+app.post('/editevent',async(req,res)=>{
+    const {
+        title,
+        description,
+        date,
+        time,
+        url,
+        venue,
+        host
+    }=req.body;
+    // const admin_id='123';
+    console.log(title,description,date,time,url,venue,host);
+    const id=req.query.id;
+    try{
+        //find by id and update
+        const event=await Event.findById(id);
+        event.title=title;
+        event.description=description;
+        event.date=date;
+        event.time=time;
+        event.url=url;
+        event.venue=venue;
+        event.host=host;
+        await event.save();
+        res.send('Event updated');
+    }
+    catch(err){
+        console.log(err);
+        res.send("error");
+    }
+})
+app.get('/deleteevent/:id',async(req,res)=>{
+    const id=req.params.id;
+    try{
+        const event=await Event.findById(id);
+        await event.remove();
+        res.redirect('/aevents');
+    }
+    catch(err){
+        console.log(err);
+        res.send("error");
+    }
+})
 mongoose.connect('mongodb://localhost:27017/nitc_events',{useNewUrlParser:true,useUnifiedTopology:true});
 app.listen(3000,()=>{
     console.log('server started');

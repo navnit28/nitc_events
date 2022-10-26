@@ -16,23 +16,23 @@
 
             <div class="menu0">
                 <ul>
-                    <li><a href="#">HOME</a></li>
-                    <li><a href="#">CREATE EVENT</a></li>
+                    <li><a href="aevents">HOME</a></li>
+                    <li><a href="addevent">CREATE EVENT</a></li>
                     <li><a href="#">LOG OUT</a></li>
                 </ul>
             </div>
 
         </div>
         <div class="content0">
-            <form class="form0 formevent" >
+            <form class="form0 formevent" action="/editevent?id=<%= event._id %>" method="POST">
                 <h2>Event Details</h2>
-                <input type="text" name="title" placeholder="SAC Onam">
-                <input type="text" name="description" placeholder="Onam Description">
-                <input type="datetime" name="date" placeholder="28th September 2022">
-                <input type="text" name="time" placeholder="10 : 00 AM">
-                <input type="text" name="url" placeholder="https://google.com/onam.png">
-                <input type="text" name="venue" placeholder="A Hostel NITC">
-                <input type="text" name="host" placeholder="SAC">
+                <input type="text" name="title" value="<%= event.title %>" placeholder="SAC Onam">
+                <input type="text" name="description" value="<%= event.description %>"placeholder="Onam Description">
+                <input type="datetime" name="date" value="<%= event.date %>"placeholder="28th September 2022">
+                <input type="text" name="time" value="<%= event.time %>"placeholder="10 : 00 AM">
+                <input type="text" name="url" value="<%= event.url %>"placeholder="https://google.com/onam.png">
+                <input type="text" name="venue" value="<%= event.venue %>"placeholder="A Hostel NITC">
+                <input type="text" name="host" value="<%= event.host %>"placeholder="SAC">
                 <button class="btnn0 btnn1">Save Details</button>
             </form>
         </div>

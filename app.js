@@ -9,6 +9,7 @@ require('./auth')
 const passport = require('passport');
 const sesssion = require('express-session');
 const Event=require('./models/eventSchema');
+const Registration=require('./models/registrationSchema');
 // const config=require('./config/database');
 const static_path=path.join(__dirname,'public');
 console.log(static_path);
@@ -84,8 +85,33 @@ app.get('/aevents',redirectLoginAdmin,async (req,res)=>{
 })
 app.get('/events',isLoggedIn,async (req,res)=>{
     const events=await Event.find();
-    console.log(req.user);
+    const registrations=await Registration.find({user_email:req.user.email});
+    console.log(registrations);
+    // console.log(req.user);
+    for(let i=0;i<events.length;i++){
+        let found=false;
+        for(let j=0;j<registrations.length;j++){
+            if(events[i]._id==registrations[j].event_id){
+                events[i].registered=true;
+                found=true;
+            }
+        }
+        if(!found){
+            events[i].registered=false;
+        }
+    }
     res.render('events',{events,user:req.user});
+})
+app.get('/register/event/:id',isLoggedIn,async (req,res)=>{
+    const id=req.params.id;
+    const user_email=req.user.email;
+    console.log(user_email,id);
+    const registration=new Registration({
+        event_id:id,
+        user_email:user_email
+    });
+    registration.save();
+    res.send("registered");
 })
 app.get('/addevent',redirectLoginAdmin,(req,res)=>{
     res.render('addevent');

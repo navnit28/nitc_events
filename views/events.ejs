@@ -19,7 +19,8 @@
             <div class="menu0">
                 <ul>
                     <li><a href="events">HOME</a></li>
-                    <li><a href="#">LOG OUT</a></li>
+                    <li><a href="user/logout">LOG OUT</a></li>
+                    <li> Hi , <%= user.given_name %></li>
                 </ul>
             </div>
 
@@ -41,13 +42,14 @@
                             <span class="card-media-body-heading"><%= events[i].description %></span>
                             <div class="card-media-body-supporting-bottom">
                                 <span class="card-media-body-supporting-bottom-text subtle">Venue - <%= events[i].venue %></span>
+                                <a href="/register/event/<%= events[i]._id %>" class="card-media-body-supporting-bottom-text card-media-link u-float-right">Register</a>
                                 <!-- <a href="#/" class="card-media-body-supporting-bottom-text subtle u-float-right card-media-link">Delete</a>
                                 <a href="#/" class="card-media-body-supporting-bottom-text subtle u-float-right card-media-link">Edit</a> -->
                             </div>
                             <div class="card-media-body-supporting-bottom card-media-body-supporting-bottom-reveal">
                                 <span class="card-media-body-supporting-bottom-text subtle">#Music #Party</span>
-                                <!-- <a href="#/" class="card-media-body-supporting-bottom-text card-media-link u-float-right">Delete</a>
-                                <a href="#/" class="card-media-body-supporting-bottom-text card-media-link u-float-right">Edit</a> -->
+                                <a href="/register/event/<%= events[i]._id %>" class="card-media-body-supporting-bottom-text card-media-link u-float-right">Register</a>
+                                <!-- <a href="#/" class="card-media-body-supporting-bottom-text card-media-link u-float-right">Edit</a> -->
                             </div>
                         </div>
                     </div>

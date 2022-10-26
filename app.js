@@ -3,6 +3,9 @@ const app=express();
 const mongoose=require('mongoose');
 const path=require('path');
 const bodyParser = require('body-parser');
+//require dotenv
+require('dotenv').config();
+require('./auth')
 const passport = require('passport');
 const sesssion = require('express-session');
 const Event=require('./models/eventSchema');
@@ -30,6 +33,8 @@ app.use(sesssion({
 
     },
 }))
+app.use(passport.initialize());
+app.use(passport.session());
 // app.set('view engine','ejs');
 app.use(express.static(static_path));
 app.set('view engine','ejs');
@@ -47,6 +52,9 @@ const redirectHomeAdmin=(req,res,next)=>{
         next()
     }
 }
+function isLoggedIn(req, res, next) {
+    req.user ? next() : res.redirect('/');
+  }
 app.get('/',(req,res)=>{
     res.render('index');
 })
@@ -74,14 +82,23 @@ app.get('/aevents',redirectLoginAdmin,async (req,res)=>{
     console.log(events);
     res.render('aevents',{events});
 })
-app.get('/events',async (req,res)=>{
+app.get('/events',isLoggedIn,async (req,res)=>{
     const events=await Event.find();
-    console.log(events);
-    res.render('events',{events});
+    console.log(req.user);
+    res.render('events',{events,user:req.user});
 })
 app.get('/addevent',redirectLoginAdmin,(req,res)=>{
     res.render('addevent');
 })
+app.get('/auth/google',passport.authenticate('google',{
+    scope:['profile','email']
+}))
+app.get( '/auth/google/callback',
+  passport.authenticate( 'google', {
+    successRedirect: '/events',
+    failureRedirect: '/'
+  })
+);
 app.post('/addevent',redirectLoginAdmin,async (req,res)=>{
     const {
         title,
@@ -170,6 +187,16 @@ app.get('/admin/logout',redirectLoginAdmin,(req,res)=>{
         res.clearCookie(SESS_NAME);
         console.log("logged out");
         res.redirect('/adminlogin');
+    })
+})
+app.get('/user/logout',isLoggedIn,async(req,res)=>{
+    req.logOut(function(err){
+        if(err){
+            return res.redirect('/events');
+        }
+        req.session.destroy();
+        console.log("logged out");
+        res.redirect('/');
     })
 })
 mongoose.connect('mongodb://localhost:27017/nitc_events',{useNewUrlParser:true,useUnifiedTopology:true});

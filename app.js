@@ -12,9 +12,22 @@ const flash = require('connect-flash')
 const Event=require('./models/eventSchema');
 const User=require('./models/userSchema');
 const Registration=require('./models/registrationSchema');
+const Admin=require('./models/adminSchema');
 // const config=require('./config/database');
 const static_path=path.join(__dirname,'public');
-console.log(static_path);
+// console.log(static_path);
+
+async function checkAdmin (){
+    const admin=await Admin.find();
+if(admin.length==0){
+    const admin=new Admin({
+        email:process.env.ADMIN_EMAIL,
+        password:process.env.ADMIN_PASSWORD
+    })
+    await admin.save();
+}
+}
+checkAdmin();
 const {
     PORT =3000,
     NODE_ENV='development',
@@ -70,7 +83,7 @@ app.post('/adminlogin',(req,res)=>{
     console.log("admin login");
     console.log(req.body);
     const {email,password}=req.body;
-    if(email=="admin" && password=="admin"){
+    if(email==process.env.ADMIN_EMAIL && password==process.env.ADMIN_PASSWORD){
         //use passport to authenticate
         req.session.userId=email;
         res.redirect('/aevents');

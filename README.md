@@ -27,7 +27,7 @@ To run this project, you will need to add the following environment variables to
 ## Installation
 ### To run this project on your local system please ensure that you have following things installed:-
 * node intalled in your system
-* mongodb installed and is running in background 
+* mongodb installed and is running in background. For installation refer this link https://www.mongodb.com/docs/manual/tutorial/install-mongodb-on-windows/ or https://www.mongodb.com/docs/manual/tutorial/install-mongodb-on-ubuntu-tarball/ . 
 * Make sure that no other application is using port 3000
 #### Clone this repository https://github.com/navnit28/nitc_events
 Then run these commands in your terminal

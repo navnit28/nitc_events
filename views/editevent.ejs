@@ -26,10 +26,10 @@
         <div class="content0">
             <form class="form0 formevent" action="/editevent?id=<%= event._id %>" method="POST">
                 <h2>Event Details</h2>
-                <input type="text" name="title" value="<%= event.title %>" placeholder="SAC Onam">
+                <input type="text" name="title" value="<%= event.title %>" placeholder="SAC Onam" required>
                 <input type="text" name="description" value="<%= event.description %>"placeholder="Onam Description">
-                <input type="datetime" name="date" value="<%= event.date %>"placeholder="28th September 2022">
-                <input type="text" name="time" value="<%= event.time %>"placeholder="10 : 00 AM">
+                <input type="date" name="date" value="<%= event.date %>"placeholder="28th September 2022" required>
+                <input type="time" name="time" value="<%= event.time %>"placeholder="10 : 00 AM" required>
                 <input type="text" name="url" value="<%= event.url %>"placeholder="https://google.com/onam.png">
                 <input type="text" name="venue" value="<%= event.venue %>"placeholder="A Hostel NITC">
                 <input type="text" name="host" value="<%= event.host %>"placeholder="SAC">

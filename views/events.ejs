@@ -25,7 +25,11 @@
             </div>
 
         </div>
-
+        <% if (message.length > 0) { %>
+            <script>
+                alert("<%= message %>");
+            </script>
+        <% } %>
         <div class="content">
             <div class="container">    
                 <% for(var i=0;i<events.length;i++){ %>

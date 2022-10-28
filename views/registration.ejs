@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <title>NITC Events</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="events.css">
+    <!-- CSS only -->
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-Zenh87qX5JnK2Jl0vWa8Ck2rdkQ2Bzep5IDxbcnCeuOxjzrPF/et3URy9Bv1WTRi" crossorigin="anonymous">
+
+</head>
+
+<body>
+
+    <div class="main0">
+        <div class="navbar0">
+            <div class="icon0">
+                <h2 class="logo0"></h2>
+            </div>
+
+            <div class="menu0">
+                <ul>
+                    <li><a href="aevents">HOME</a></li>
+                    <li><a href="addevent">CREATE EVENT</a></li>
+                    <li><a href="admin/logout">LOG OUT</a></li>
+                </ul>
+            </div>
+
+        </div>
+           
+        <div class="content">
+            <table class ="table table-striped table-dark">
+                
+                <tr>
+                    <th>Name</th>
+                    <th>Email</th>
+                    <th>Branch</th>
+                </tr>
+                <% for(var i=0;i<registration.length;i++){ %>
+                <tr>
+                    <td><%= registration[i].name %></td>
+                    <td><%= registration[i].email %></td>
+                    <td><%= registration[i].branch %></td>
+                </tr>
+                <% } %>
+        </div>
+    </div>
+    </div>
+    </div>
+    <script src="https://unpkg.com/ionicons@5.4.0/dist/ionicons.js"></script>
+</body>
+
+</html>

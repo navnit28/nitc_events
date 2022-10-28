@@ -8,7 +8,9 @@ require('dotenv').config();
 require('./auth')
 const passport = require('passport');
 const sesssion = require('express-session');
+const flash = require('connect-flash')
 const Event=require('./models/eventSchema');
+const User=require('./models/userSchema');
 const Registration=require('./models/registrationSchema');
 // const config=require('./config/database');
 const static_path=path.join(__dirname,'public');
@@ -34,6 +36,7 @@ app.use(sesssion({
 
     },
 }))
+app.use(flash())
 app.use(passport.initialize());
 app.use(passport.session());
 // app.set('view engine','ejs');
@@ -60,7 +63,7 @@ app.get('/',(req,res)=>{
     res.render('index');
 })
 app.get('/adminlogin',redirectHomeAdmin,(req,res)=>{
-    res.render('adminlogin');
+    res.render('adminlogin',{message:req.flash('message')});
 })
 app.post('/adminlogin',(req,res)=>{
     // res.render('adminlogin');
@@ -81,9 +84,21 @@ app.post('/adminlogin',(req,res)=>{
 app.get('/aevents',redirectLoginAdmin,async (req,res)=>{
     const events=await Event.find();
     console.log(events);
-    res.render('aevents',{events});
+    res.render('aevents',{events,message:req.flash('message')});
 })
 app.get('/events',isLoggedIn,async (req,res)=>{
+    const user =await User.findOne({email:req.user.email});
+    if(!user){
+        //get last two character brfore @
+        const branch=req.user.email.substring(req.user.email.lastIndexOf("@")-2,req.user.email.lastIndexOf("@"));
+        console.log(branch);
+        const new_user=new User({
+            name:req.user.displayName,
+            email:req.user.email,
+            branch:branch
+        })
+        await new_user.save();
+    }
     const events=await Event.find();
     const registrations=await Registration.find({user_email:req.user.email});
     console.log(registrations);
@@ -100,7 +115,7 @@ app.get('/events',isLoggedIn,async (req,res)=>{
             events[i].registered=false;
         }
     }
-    res.render('events',{events,user:req.user});
+    res.render('events',{events,user:req.user,message:req.flash('message')});
 })
 app.get('/register/event/:id',isLoggedIn,async (req,res)=>{
     const id=req.params.id;
@@ -111,7 +126,8 @@ app.get('/register/event/:id',isLoggedIn,async (req,res)=>{
         user_email:user_email
     });
     registration.save();
-    res.send("registered");
+    req.flash('message','Registered Successfully');
+    res.redirect('/events');
 })
 app.get('/addevent',redirectLoginAdmin,(req,res)=>{
     res.render('addevent');
@@ -135,7 +151,7 @@ app.post('/addevent',redirectLoginAdmin,async (req,res)=>{
         venue,
         host
     }=req.body;
-    const admin_id='123';
+    const admin_id=req.session.userId;
     try{
         const newEvent=new Event({
             title,
@@ -148,7 +164,8 @@ app.post('/addevent',redirectLoginAdmin,async (req,res)=>{
             admin_id
         });
         await newEvent.save()
-        res.send('Event added');
+        req.flash('message','Event added successfully');
+        res.redirect('/aevents');
     }
     catch(err){
         console.log(err);
@@ -172,7 +189,6 @@ app.post('/editevent',redirectLoginAdmin,async(req,res)=>{
         venue,
         host
     }=req.body;
-    // const admin_id='123';
     console.log(title,description,date,time,url,venue,host);
     const id=req.query.id;
     try{
@@ -186,7 +202,8 @@ app.post('/editevent',redirectLoginAdmin,async(req,res)=>{
         event.venue=venue;
         event.host=host;
         await event.save();
-        res.send('Event updated');
+        req.flash('message','Event updated successfully');
+        res.redirect('/aevents');
     }
     catch(err){
         console.log(err);
@@ -198,6 +215,7 @@ app.get('/deleteevent/:id',redirectLoginAdmin,async(req,res)=>{
     try{
         const event=await Event.findById(id);
         await event.remove();
+        req.flash('message','Event deleted successfully');
         res.redirect('/aevents');
     }
     catch(err){
@@ -212,6 +230,7 @@ app.get('/admin/logout',redirectLoginAdmin,(req,res)=>{
         }
         res.clearCookie(SESS_NAME);
         console.log("logged out");
+        // req.flash('message','Logged out successfully');
         res.redirect('/adminlogin');
     })
 })
@@ -222,8 +241,26 @@ app.get('/user/logout',isLoggedIn,async(req,res)=>{
         }
         req.session.destroy();
         console.log("logged out");
+        // req.flash('message','Logged out successfully');
         res.redirect('/');
     })
+})
+app.get('/registration',async(req,res)=>{
+    // const registrations=await Registration.find();
+    const id=req.query.id;
+    const registrations_lite=await Registration.find({event_id:id});
+    console.log(registrations_lite,"lite");
+    if(registrations_lite.length==0){
+        res.send("No registrations");
+    }
+    let registration=[];
+    for(let i=0;i<registrations_lite.length;i++){
+        const user=await User.findOne({email:registrations_lite[i].user_email});
+        registration.push(user);
+        // registration.push(user);
+    }
+    console.log(registration);
+    res.render('registration',{registration});
 })
 mongoose.connect('mongodb://localhost:27017/nitc_events',{useNewUrlParser:true,useUnifiedTopology:true});
 app.listen(PORT,()=>{

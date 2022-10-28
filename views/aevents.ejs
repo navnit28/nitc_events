@@ -25,8 +25,13 @@
             </div>
 
         </div>
-
+           
         <div class="content">
+            <% if (message.length >0) { %>
+                <script>
+                    alert("<%= message %>");
+                </script>
+                <% } %>
             <div class="container">
                 <% for(var i=0;i<events.length;i++){ %>
                 <div class="card-media">
@@ -44,11 +49,13 @@
                             <span class="card-media-body-supporting-bottom-text subtle">Venue - <%= events[i].venue %></span>
                             <a href="#/" class="card-media-body-supporting-bottom-text subtle u-float-right card-media-link">Delete</a>
                             <a href="#/" class="card-media-body-supporting-bottom-text subtle u-float-right card-media-link">Edit</a>
+                            <a href="#/" class="card-media-body-supporting-bottom-text subtle u-float-right card-media-link">View Registered Users</a>
                         </div>
                         <div class="card-media-body-supporting-bottom card-media-body-supporting-bottom-reveal">
                             <span class="card-media-body-supporting-bottom-text subtle">#Music #Party</span>
                             <a href="/deleteevent/<%= events[i]._id %>" class="card-media-body-supporting-bottom-text card-media-link u-float-right">Delete</a>
                             <a href="/editevent?id=<%= events[i]._id %>" class="card-media-body-supporting-bottom-text card-media-link u-float-right">Edit</a>
+                            <a href="/registration?id=<%= events[i]._id %>" class="card-media-body-supporting-bottom-text card-media-link u-float-right">View Registered Users</a>
                         </div>
                     </div>
                 </div>

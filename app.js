@@ -130,6 +130,15 @@ app.get('/events',isLoggedIn,async (req,res)=>{
     }
     res.render('events',{events,user:req.user,message:req.flash('message')});
 })
+app.get('/myevents',isLoggedIn,async (req,res)=>{
+    const registrations=await Registration.find({user_email:req.user.email});
+    const events=[];
+    for(let i=0;i<registrations.length;i++){
+        const event=await Event.findById(registrations[i].event_id);
+        events.push(event);
+    }
+    res.render('myevents',{events,user:req.user});
+})
 app.get('/register/event/:id',isLoggedIn,async (req,res)=>{
     const id=req.params.id;
     const user_email=req.user.email;
